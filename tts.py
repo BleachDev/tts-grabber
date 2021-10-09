@@ -24,6 +24,7 @@ if len(sys.argv) == 2 and sys.argv[1].lower().startswith("-h"):
 """TTS-Grabber v1.0 @ https://github.com/BleachDrinker420/TTS-Grabber
 
 PARAMETER           TYPE  DESCRIPTION
+-h, -help           ---   Shows the help info.
 -v, -voice          Int   Sets the voice id to use.
 -s, -speed          Int   Sets the TTS voice speed (in percent).
 -vol, -volume       Int   Changes the TTS volume (in decibels).
