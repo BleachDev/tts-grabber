@@ -11,6 +11,7 @@ You can run just `tts.py` without any parameters to open the voice selector with
 #### Parameters
 ```
 PARAMETER           TYPE  DESCRIPTION
+-h, -help           ---   Shows the help info.
 -v, -voice          Int   Sets the voice id to use.  
 -s, -speed          Int   Sets the TTS voice speed (in percent).  
 -vol, -volume       Int   Changes the TTS volume (in decibels).  
