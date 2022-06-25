@@ -21,7 +21,7 @@ def compare(dic1, dic2):
 
 if len(sys.argv) == 2 and sys.argv[1].lower().startswith("-h"):
     print(
-"""TTS-Grabber v1.0 @ https://github.com/BleachDrinker420/TTS-Grabber
+"""TTS-Grabber v1.0 @ https://github.com/BleachDev/TTS-Grabber
 
 PARAMETER           TYPE  DESCRIPTION
 -h, -help           ---   Shows the help info.
