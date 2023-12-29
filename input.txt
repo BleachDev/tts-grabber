@@ -1,3 +1,8 @@
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-Scelerisque felis imperdiet proin fermentum leo. Ultrices eros in cursus turpis massa tincidunt.
-Convallis a cras semper auctor neque vitae tempus quam pellentesque.
+Here are <say-as interpret-as="characters">SSML</say-as> samples.
+I can pause <break time="3s"/>.
+I can play a sound
+<audio src="https://download.samplelib.com/mp3/sample-3s.mp3">didn't get your MP3 audio file</audio>.
+I can speak in cardinals. Your number is <say-as interpret-as="cardinal">10</say-as>.
+Or I can speak in ordinals. You are <say-as interpret-as="ordinal">10</say-as> in line.
+Or I can even speak in digits. The digits for ten are <say-as interpret-as="characters">10</say-as>.
+I can also substitute phrases, like the <sub alias="World Wide Web Consortium">W3C</sub>.

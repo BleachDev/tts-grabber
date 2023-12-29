@@ -2,6 +2,7 @@ import functools
 import requests
 import textwrap
 import os.path
+import time
 import json
 import sys
 
@@ -21,7 +22,7 @@ def compare(dic1, dic2):
 
 if len(sys.argv) == 2 and sys.argv[1].lower().startswith("-h"):
     print(
-"""TTS-Grabber v1.0 @ https://github.com/BleachDev/TTS-Grabber
+"""TTS-Grabber (https://github.com/BleachDev/TTS-Grabber)
 
 PARAMETER           TYPE  DESCRIPTION
 -h, -help           ---   Shows the help info.
@@ -60,35 +61,35 @@ while _loop <= len(sys.argv) - 2:
         elif arg == "-lp" or arg == "-line-pause":
             arg_line_pause = float(sys.argv[_loop + 1])
     except:
-        print("error > " + sys.argv[_loop] + " | " + sys.argv[_loop + 1])
+        print("error > " + sys.argv[_loop] + " / " + sys.argv[_loop + 1])
         pass
     _loop += 2
 
 if os.path.isfile("lastused.json"):
-    with open('lastused.json', encoding='utf-8') as f:
-        lastUsed = json.loads(f.read())
+    with open('lastused.json') as f:
+        lastUsed = json.load(f)
 
-with open('data.json', encoding='utf-8') as f:
-    js_data = json.loads(f.read())
+with open('data.json') as f:
+    js_data = json.load(f)
 
-for id_, entry in js_data.items():
+for entry in js_data:
     data.append(entry)
 
 data.sort(key=functools.cmp_to_key(compare))
 
 if arg_voice == -1:
-    print("ID   LANGUAGE                GENDER  NAME                TYPE")
+    print("ID   LANGUAGE                        GENDER  NAME                TYPE")
     for i in range(len(data)):
         print(
             (" " * (3 - len(str(i + 1)))) + str(i + 1)
-            + ": " + data[i]["language"] + (" " * (24 - len(data[i]["language"])))
+            + ": " + data[i]["language"] + (" " * (32 - len(data[i]["language"])))
             + data[i]["gender"] + (" " * (8 - len(data[i]["gender"])))
             + data[i]["name"] + (" " * (20 - len(data[i]["name"])))
             + data[i]["voiceType"][0])
 
     if lastUsed != {}:
         print("...........................................................")
-        print("  0: " + lastUsed["language"] + (" " * (24 - len(lastUsed["language"])))
+        print("  0: " + lastUsed["language"] + (" " * (32 - len(lastUsed["language"])))
             + lastUsed["gender"] + (" " * (8 - len(lastUsed["gender"])))
             + lastUsed["name"] + (" " * (20 - len(lastUsed["name"])))
             + lastUsed["voiceType"][0])
@@ -125,27 +126,36 @@ with open("lastused.json", "w") as f:
         f.write(json.dumps(voice))
 
 for i in range(ttsTextLen):
+    input_text = "<speak><p>" + ttsTextSplit[i] + "</p></speak>"
     params = {
         "globalSpeed": str(arg_speed) + "%",
         "globalVolume": ("+" if arg_volume >= 0 else "") + str(arg_volume) + "dB",
-        "chunk": "<speak><p>" + ttsTextSplit[i] + "</p></speak>",
+        "chunk": input_text,
         "narrationStyle": "regular",
         "platform": "landing_demo",
-        "ssml": "<speak><p>" + ttsTextSplit[i] + "</p></speak>",
+        "ssml": input_text,
         "userId": "5pe8l4FrdbczcoHOBkUtp0W37Gh2",
         "voice": voice["value"]
     }
     
     print("Seding request.. [" + str(i + 1) + "/" + str(ttsTextLen) + "]")
     req = requests.post("https://play.ht/api/transcribe", data=params)
-    response = json.loads(req.content)
 
-    head = requests.head(response["file"])
-    filesize = head.headers.get('content-length', -1)
-    print("Getting file.. [" + str(i + 1) + "/" + str(ttsTextLen) + "] (" + str(round(float(filesize) / 1024, 2)) + " KB)")
+    filename = "_" + voice["name"] + "-" + str(time.time_ns() / 1000) + "-" + str(i + 1) + ".mp3"
+    try:
+        response = json.loads(req.text)
 
-    filename = "_" + voice["name"] + "-" + str(response["created_at"]) + "-" + str(i + 1) + ".mp3"
-    with open(filename, "wb") as f:
-        f.write(requests.get(response["file"]).content)
+        head = requests.head(response["file"])
+        filesize = head.headers.get('content-length', -1)
+        print("Getting file.. [" + str(i + 1) + "/" + str(ttsTextLen) + "] (JSON " + str(round(float(filesize) / 1024, 2)) + " KB)")
+
+        with open(filename, "wb") as f:
+            f.write(requests.get(response["file"]).content)
+    except:
+        # Assume we got an audio file
+        print("Getting file.. [" + str(i + 1) + "/" + str(ttsTextLen) + "] (MP3? " + str(round(len(req.content) / 1024, 2)) + " KB)")
+
+        with open(filename, "wb") as f:
+            f.write(req.content)
 
     print("Saved to " + filename)
