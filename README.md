@@ -1,7 +1,7 @@
 # TTS-Grabber
-Quick thing i made about a year ago to download any text with any tts voice, over 630 voices to choose from currently.
+Quick thing i made about a year ago to download any text with any tts voice, 829 voices to choose from currently.
 
-It will split the input into multiple files every 1500 words or so to not hit any cutoff limits from TTS providers.
+The program will split the input into multiple files every 1500 words or so to not hit any cutoff limits from TTS providers.
 
 ## Usage:  
 Edit `input.txt` to change the text to synthesize.
@@ -21,6 +21,6 @@ PARAMETER           TYPE  DESCRIPTION
 ```
 
 Example with parameters:  
-`tts.py -v 184 -s 100 -vol 0 -pp 1 -cp 0.5 -lp 2`
+`tts.py -v 777 -s 100 -vol 0 -pp 1 -cp 0.5 -lp 2`
 
 ###### absolutely no api abuse here
